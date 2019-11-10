@@ -6,7 +6,7 @@
 /*   By: amonteli <amonteli@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/03 16:36:36 by amonteli     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/08 22:19:20 by amonteli    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/10 05:37:09 by amonteli    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -17,43 +17,72 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdio.h>
-#define BUFFER_SIZE 972
+
+int		ft_pretty(char **line, t_gnl *current)
+{
+	int		size;
+
+	if (!ft_strchr(current->content, '\n'))
+	{
+		*line = ft_strdup(current->content);
+		return (0);
+	}
+	else
+	{
+		size = (int)(ft_strchr(current->content, '\n') - current->content);
+		*line = ft_substr(current->content, 0, size);
+		current->content = ft_strdup(current->content + size + 1);
+		return (1);
+	}
+}
 
 int		get_next_line(int fd, char **line)
 {
-	static char	*str;
+	static t_gnl	*lst;
+	t_gnl			*tmp;
+	char			buffer[BUFFER_SIZE + 1];
 
-	str = NULL;
-	if (fd < 0 || !line || BUFFER_SIZE < 1)
+	if (!line || BUFFER_SIZE < 1 || read(fd, buffer, 0) < 0)
 		return (-1);
-	str = malloc(sizeof(char) * BUFFER_SIZE);
-	*line = malloc(sizeof(char) * BUFFER_SIZE);
-	printf("%zd\n", read(fd, str, BUFFER_SIZE));
-	int count;
-	count = 0;
-	if (!ft_strlen(str))
-		return (0);
-	while (str[count] && str[count] != '\n')
+	if (!lst && !(lst = ft_create_list(fd)))
+			return (-1);
+	if (!(tmp = ft_lstchr(lst, fd)) && !(tmp = ft_lstadd(&lst, ft_create_list(fd)))) // si il trouve pas il le creer
+		return (-1);
+	while (!ft_strchr(tmp->content, '\n') && read(fd, buffer, 265) > 0)
 	{
-		(*line)[count] = str[count];
-		count++;
+		buffer[BUFFER_SIZE] = '\0';
+	//	printf("READ %d-[%s]\n", r, buffer);
+		tmp->content = ft_strjoin(tmp->content, buffer);
 	}
-	return (1);
+	return (ft_pretty(line, tmp));
+	// printf("%d\n", (int)(ft_strchr(tmp->content, '\n') - tmp->content));
+	// printf("%s\n", tmp->content);
+	// lst->content = ft_strjoin(lst->content, buffer);
+	// *line = lst->content;
+	// printf("%zd\n", read(fd, lst->content, BUFFER_SIZE));
+	// return (1);
 }
 
 int		main()
 {
 	char	*line;
 	int 	fd;
+	int 	i = 0;
 
-	fd = open("get_next_line.c", O_RDONLY);
+	fd = open("bible.tt", O_RDONLY);
+	// fd = open("get_next_line.c", O_RDONLY);
 	printf("GNL with fd=%d\n", fd);
-	get_next_line(fd, &line);
-	printf("<\n%s\n>", line);
-	while ((get_next_line(fd, &line)) == 1)
+	// get_next_line(fd, &line);
+	// printf("<\n%s\n>", line);
+	// get_next_line(fd, &line);
+	// printf("<\n%s\n>", line);
+
+	while ((i = get_next_line(fd, &line)) > 0)
 	{
-		printf("l : %s\n", line);
-		// free(line);
+		printf("%s | %d\n", line, i);
+		free(line);
+		line = NULL;
 	}
-	free(line);
+	// free(line);
+	// printf("%s\n", ft_strjoin("", "\n"));
 }
