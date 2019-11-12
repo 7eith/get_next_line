@@ -6,7 +6,7 @@
 /*   By: amonteli <amonteli@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/03 16:36:36 by amonteli     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 10:32:54 by amonteli    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 18:14:12 by amonteli    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -18,12 +18,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-char	*ft_strdup(char *s)
+char	*ft_strdup(char *s, int action)
 {
 	int		count;
 	char	*tab;
 
 	count = 0;
+	if (!s)
+		return (NULL);
 	while (s[count])
 		count++;
 	if (!(tab = (char *)malloc((count + 1) * sizeof(char))))
@@ -32,6 +34,8 @@ char	*ft_strdup(char *s)
 	while (s[++count])
 		tab[count] = s[count];
 	tab[count] = '\0';
+	if (s && action)
+		free(s);
 	return (tab);
 }
 
@@ -45,7 +49,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (!s)
 		return (NULL);
 	if (ft_strlen(s) < start)
-		return (ft_strdup(""));
+		return (ft_strdup("", 0));
 	size = ft_strlen(s + start);
 	if (size < len)
 		len = size;
@@ -60,7 +64,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (tab);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2, int action)
 {
 	size_t	count;
 	size_t	s1_size;
@@ -70,13 +74,17 @@ char	*ft_strjoin(char *s1, char *s2)
 	s1_size = ft_strlen(s1);
 	if (!(tab = (char *)malloc((s1_size + ft_strlen(s2) + 1) * sizeof(char))))
 		return (NULL);
-	while (s1 && s1[++count])
-		tab[count] = s1[count];
+	if (s1)
+		while (s1[++count])
+			tab[count] = s1[count];
 	count = -1;
-	while (s2 && s2[++count])
-		tab[s1_size + count] = s2[count];
+	if (s2)
+		while (s2[++count])
+			tab[s1_size + count] = s2[count];
 	tab[s1_size + count] = '\0';
-	free(s1);
+	if (action == 1)
+		if (s1)
+			free(s1);
 	return (tab);
 }
 
@@ -98,18 +106,21 @@ int		ft_pretty(char **line, t_gnl *current, t_gnl **first)
 		linked = *first;
 	if (!ft_strchr(current->content, '\n'))
 	{
-		*line = ft_strdup(current->content);
+		*line = ft_strdup(current->content, 1);
 		while (linked->next && linked->next->fd != current->fd)
 			linked = linked->next;
 		linked->next = current->next;
-		free(current);
+		// free(current->content);
+		// free(current);
 		return (0);
 	}
 	else
 	{
 		size = (int)(ft_strchr(current->content, '\n') - current->content);
 		*line = ft_substr(current->content, 0, size);
-		current->content = ft_strdup(current->content + size + 1);
+		// printf("size=%zu\n", ft_strlen(current->content));
+		current->content = ft_strdup(current->content + size + 1, 0);
+		// printf("new_size=%zu\n", ft_strlen(current->content));
 		return (1);
 	}
 }
@@ -119,7 +130,6 @@ int		get_next_line(int fd, char **line)
 	static t_gnl	*lst;
 	t_gnl			*tmp;
 	char			buffer[BUFFER_SIZE + 1];
-	char			*temp;
 	int				readed;
 
 	readed = 0;
@@ -131,12 +141,11 @@ int		get_next_line(int fd, char **line)
 		!(tmp = ft_lstadd(&lst, ft_create_list(fd))))
 		return (-1);
 	while (!ft_strchr(tmp->content, '\n')
-	&& (readed = read(fd, buffer, BUFFER_SIZE)) > 0)
+		&& (readed = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
 		buffer[readed] = '\0';
-		temp = ft_strjoin(tmp->content, buffer);
-		tmp->content = ft_strdup(temp);
-		ft_strdel(&temp);
+		// printf("[debug] readed=%d/%d\n", readed, BUFFER_SIZE);
+		tmp->content = ft_strjoin(tmp->content, buffer, 1);
 	}
 	return (ft_pretty(line, tmp, &lst));
 }
