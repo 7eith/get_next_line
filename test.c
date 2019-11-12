@@ -6,7 +6,7 @@
 /*   By: amonteli <amonteli@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/11 17:22:51 by amonteli     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/11 21:43:15 by amonteli    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 10:20:14 by amonteli    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -24,16 +24,6 @@ int		main()
 	int 	fd;
 	int 	i = 0;
 
-	fd = open("get_next_line.c", O_RDONLY);
-
-	while ((i = get_next_line(fd, &line)) > 0)
-	{
-		printf("[%d]%s\n", i, line);
-		// free(line);
-	}
-	printf("[%d]%s\n", i, line);
-	free(line);
-
 	fd = open("get_next_line.h", O_RDONLY);
 
 	while ((i = get_next_line(fd, &line)) > 0)
@@ -43,6 +33,16 @@ int		main()
 	}
 	printf("[%d]%s\n", i, line);
 	free(line);
+
+	// fd = open("get_next_line.h", O_RDONLY);
+
+	// while ((i = get_next_line(fd, &line)) > 0)
+	// {
+	// 	printf("[%d]%s\n", i, line);
+	// 	free(line);
+	// }
+	// printf("[%d]%s\n", i, line);
+	// free(line);
 }
 
 // int		main() // Multi FD
