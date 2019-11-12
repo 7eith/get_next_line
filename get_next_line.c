@@ -6,7 +6,7 @@
 /*   By: amonteli <amonteli@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/03 16:36:36 by amonteli     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/11 21:42:52 by amonteli    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 10:32:54 by amonteli    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-char	*ft_strdup(const char *s)
+char	*ft_strdup(char *s)
 {
 	int		count;
 	char	*tab;
@@ -99,7 +99,6 @@ int		ft_pretty(char **line, t_gnl *current, t_gnl **first)
 	if (!ft_strchr(current->content, '\n'))
 	{
 		*line = ft_strdup(current->content);
-		ft_strdel(&current->content);
 		while (linked->next && linked->next->fd != current->fd)
 			linked = linked->next;
 		linked->next = current->next;
@@ -110,7 +109,7 @@ int		ft_pretty(char **line, t_gnl *current, t_gnl **first)
 	{
 		size = (int)(ft_strchr(current->content, '\n') - current->content);
 		*line = ft_substr(current->content, 0, size);
-		current->content = ft_strjoin(current->content + size + 1, NULL);
+		current->content = ft_strdup(current->content + size + 1);
 		return (1);
 	}
 }
@@ -136,7 +135,8 @@ int		get_next_line(int fd, char **line)
 	{
 		buffer[readed] = '\0';
 		temp = ft_strjoin(tmp->content, buffer);
-		tmp->content = ft_strjoin(temp, NULL);
+		tmp->content = ft_strdup(temp);
+		ft_strdel(&temp);
 	}
 	return (ft_pretty(line, tmp, &lst));
 }
