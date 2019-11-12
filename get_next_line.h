@@ -6,7 +6,7 @@
 /*   By: amonteli <amonteli@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/03 16:36:38 by amonteli     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 10:24:59 by amonteli    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 14:10:30 by amonteli    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -26,11 +26,11 @@ typedef	struct		s_gnl
 
 int					get_next_line(int fd, char **line);
 size_t				ft_strlen(const char *s);
-char				*ft_strjoin(char *s1, char *s2);
+char				*ft_strjoin(char *s1, char *s2, int action);
 char				*ft_strchr(const char *s, int c);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 
-char				*ft_strdup(char *s);
+char				*ft_strdup(char *s, int action);
 void				ft_strdel(char **str);
 t_gnl				*ft_create_list(int fd);
 t_gnl				*ft_lstchr(t_gnl *list, int fd);
