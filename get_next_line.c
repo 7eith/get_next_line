@@ -6,17 +6,12 @@
 /*   By: amonteli <amonteli@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/03 16:36:36 by amonteli     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 19:09:55 by amonteli    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 19:53:03 by amonteli    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 char	*ft_strdup(char *s, int action)
 {
@@ -87,14 +82,6 @@ char	*ft_strjoin(char *s1, char *s2, int action)
 	return (tab);
 }
 
-void	ft_strdel(char **str)
-{
-	if (!str || !*str)
-		return ;
-	free(*str);
-	*str = NULL;
-}
-
 int		ft_pretty(char **line, t_gnl *current, t_gnl **first)
 {
 	int		size;
@@ -116,12 +103,9 @@ int		ft_pretty(char **line, t_gnl *current, t_gnl **first)
 	{
 		size = (int)(ft_strchr(current->content, '\n') - current->content);
 		*line = ft_substr(current->content, 0, size);
-		// printf("size=%zu\n", ft_strlen(current->content));
-		// current->content = ft_strdup(current->content + size + 1, 0);
 		temp = ft_strdup(current->content + size + 1, 0);
 		free(current->content);
 		current->content = temp;
-		// printf("new_size=%zu\n", ft_strlen(current->content));
 		return (1);
 	}
 }
@@ -145,7 +129,6 @@ int		get_next_line(int fd, char **line)
 		&& (readed = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
 		buffer[readed] = '\0';
-		// printf("[debug] readed=%d/%d\n", readed, BUFFER_SIZE);
 		tmp->content = ft_strjoin(tmp->content, buffer, 1);
 	}
 	return (ft_pretty(line, tmp, &lst));
