@@ -6,7 +6,7 @@
 /*   By: amonteli <amonteli@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/03 16:36:36 by amonteli     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 18:14:12 by amonteli    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 19:09:55 by amonteli    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -82,9 +82,8 @@ char	*ft_strjoin(char *s1, char *s2, int action)
 		while (s2[++count])
 			tab[s1_size + count] = s2[count];
 	tab[s1_size + count] = '\0';
-	if (action == 1)
-		if (s1)
-			free(s1);
+	if (action && s1)
+		free(s1);
 	return (tab);
 }
 
@@ -99,19 +98,18 @@ void	ft_strdel(char **str)
 int		ft_pretty(char **line, t_gnl *current, t_gnl **first)
 {
 	int		size;
+	char	*temp;
 	t_gnl	*linked;
 
-	linked = NULL;
-	if (first)
-		linked = *first;
+	linked = *first;
+	temp = NULL;
 	if (!ft_strchr(current->content, '\n'))
 	{
 		*line = ft_strdup(current->content, 1);
 		while (linked->next && linked->next->fd != current->fd)
 			linked = linked->next;
 		linked->next = current->next;
-		// free(current->content);
-		// free(current);
+		free(current);
 		return (0);
 	}
 	else
@@ -119,7 +117,10 @@ int		ft_pretty(char **line, t_gnl *current, t_gnl **first)
 		size = (int)(ft_strchr(current->content, '\n') - current->content);
 		*line = ft_substr(current->content, 0, size);
 		// printf("size=%zu\n", ft_strlen(current->content));
-		current->content = ft_strdup(current->content + size + 1, 0);
+		// current->content = ft_strdup(current->content + size + 1, 0);
+		temp = ft_strdup(current->content + size + 1, 0);
+		free(current->content);
+		current->content = temp;
 		// printf("new_size=%zu\n", ft_strlen(current->content));
 		return (1);
 	}
