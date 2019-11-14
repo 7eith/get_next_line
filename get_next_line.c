@@ -6,7 +6,7 @@
 /*   By: amonteli <amonteli@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/03 16:36:36 by amonteli     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/14 16:55:14 by amonteli    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 16:59:30 by amonteli    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -82,7 +82,7 @@ char	*ft_strjoin(char *s1, char *s2, int action)
 	return (tab);
 }
 
-int		ft_pretty(char **line, t_gnl *current, t_gnl **first)
+int		ft_cut_buffer(char **line, t_gnl *current, t_gnl **first)
 {
 	int		size;
 	char	*temp;
@@ -131,5 +131,5 @@ int		get_next_line(int fd, char **line)
 		buffer[readed] = '\0';
 		tmp->content = ft_strjoin(tmp->content, buffer, 1);
 	}
-	return (ft_pretty(line, tmp, &lst));
+	return (ft_cut_buffer(line, tmp, &lst));
 }
