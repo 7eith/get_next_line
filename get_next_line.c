@@ -6,7 +6,7 @@
 /*   By: amonteli <amonteli@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/03 16:36:36 by amonteli     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/14 16:45:15 by amonteli    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 16:55:14 by amonteli    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -92,7 +92,7 @@ int		ft_pretty(char **line, t_gnl *current, t_gnl **first)
 	if (!ft_strchr(current->content, '\n'))
 	{
 		*line = ft_strdup(current->content, 0);
-		if (!(linked == current))
+		if (linked != current)
 		{
 			while (linked->next && linked->next->fd != current->fd)
 				linked = linked->next;
@@ -102,15 +102,12 @@ int		ft_pretty(char **line, t_gnl *current, t_gnl **first)
 		}
 		return (0);
 	}
-	else
-	{
-		size = (int)(ft_strchr(current->content, '\n') - current->content);
-		*line = ft_substr(current->content, 0, size);
-		temp = ft_strdup(current->content + size + 1, 0);
-		free(current->content);
-		current->content = temp;
-		return (1);
-	}
+	size = (int)(ft_strchr(current->content, '\n') - current->content);
+	*line = ft_substr(current->content, 0, size);
+	temp = ft_strdup(current->content + size + 1, 0);
+	free(current->content);
+	current->content = temp;
+	return (1);
 }
 
 int		get_next_line(int fd, char **line)
