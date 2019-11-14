@@ -6,7 +6,7 @@
 /*   By: amonteli <amonteli@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/03 16:36:36 by amonteli     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 19:53:03 by amonteli    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 16:45:15 by amonteli    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -89,14 +89,17 @@ int		ft_pretty(char **line, t_gnl *current, t_gnl **first)
 	t_gnl	*linked;
 
 	linked = *first;
-	temp = NULL;
 	if (!ft_strchr(current->content, '\n'))
 	{
-		*line = ft_strdup(current->content, 1);
-		while (linked->next && linked->next->fd != current->fd)
-			linked = linked->next;
-		linked->next = current->next;
-		free(current);
+		*line = ft_strdup(current->content, 0);
+		if (!(linked == current))
+		{
+			while (linked->next && linked->next->fd != current->fd)
+				linked = linked->next;
+			linked->next = current->next;
+			free(current->content);
+			free(current);
+		}
 		return (0);
 	}
 	else
