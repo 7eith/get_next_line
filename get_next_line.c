@@ -6,7 +6,7 @@
 /*   By: amonteli <amonteli@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/03 16:36:36 by amonteli     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/14 16:59:30 by amonteli    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 22:01:09 by amonteli    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -97,10 +97,10 @@ int		ft_cut_buffer(char **line, t_gnl *current, t_gnl **first)
 			while (linked->next && linked->next->fd != current->fd)
 				linked = linked->next;
 			linked->next = current->next;
-			free(current->content);
-			free(current);
 		}
-		return (0);
+		free(current->content);
+		free(current);
+		return (linked == current ? (int)(*first = NULL) : 0);
 	}
 	size = (int)(ft_strchr(current->content, '\n') - current->content);
 	*line = ft_substr(current->content, 0, size);
@@ -114,7 +114,7 @@ int		get_next_line(int fd, char **line)
 {
 	static t_gnl	*lst;
 	t_gnl			*tmp;
-	char			buffer[BUFFER_SIZE + 1];
+	char			buffer[BUFFER_SIZE];
 	int				readed;
 
 	readed = 0;
