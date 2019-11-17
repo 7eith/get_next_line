@@ -6,7 +6,7 @@
 /*   By: amonteli <amonteli@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/03 16:36:36 by amonteli     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/16 17:39:38 by amonteli    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/17 16:45:11 by amonteli    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -112,7 +112,7 @@ int		get_next_line(int fd, char **line)
 {
 	static t_gnl	*lst;
 	t_gnl			*tmp;
-	char			buffer[BUFFER_SIZE];
+	char			buffer[BUFFER_SIZE + 1];
 	int				readed;
 
 	readed = 0;
