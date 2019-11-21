@@ -6,7 +6,7 @@
 /*   By: amonteli <amonteli@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/03 16:42:21 by amonteli     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 21:57:26 by amonteli    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/21 15:45:57 by amonteli    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -32,7 +32,7 @@ t_gnl	*ft_create_list(int fd)
 	if (fd < 0 || (!(lst = malloc(sizeof(t_gnl)))))
 		return (NULL);
 	lst->fd = fd;
-	lst->content = NULL;
+	lst->content = ft_strdup("");
 	lst->next = NULL;
 	return (lst);
 }
