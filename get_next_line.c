@@ -6,7 +6,7 @@
 /*   By: amonteli <amonteli@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/03 16:36:36 by amonteli     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/17 16:55:40 by amonteli    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/21 17:28:12 by amonteli    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -111,7 +111,7 @@ int		ft_cut_buffer(char **line, t_gnl *current, t_gnl **first)
 int		get_next_line(int fd, char **line)
 {
 	static t_gnl	*lst;
-	t_gnl			*tmp;
+	t_gnl			*current;
 	char			buffer[BUFFER_SIZE + 1];
 	int				readed;
 
@@ -120,14 +120,14 @@ int		get_next_line(int fd, char **line)
 		return (-1);
 	if (!lst && !(lst = ft_create_list(fd)))
 		return (-1);
-	if (!(tmp = ft_lstchr(lst, fd)) &&
-		!(tmp = ft_lstadd(&lst, ft_create_list(fd))))
+	if (!(current = ft_lstchr(lst, fd)) &&
+		!(current = ft_lstadd(&lst, ft_create_list(fd))))
 		return (-1);
-	while (!ft_strchr(tmp->content, '\n')
+	while (!ft_strchr(current->content, '\n')
 		&& (readed = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
 		buffer[readed] = '\0';
-		tmp->content = ft_strjoin(tmp->content, buffer, 1);
+		current->content = ft_strjoin(current->content, buffer, 1);
 	}
-	return (ft_cut_buffer(line, tmp, &lst));
+	return (ft_cut_buffer(line, current, &lst));
 }
